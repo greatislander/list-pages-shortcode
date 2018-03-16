@@ -1,12 +1,13 @@
 <?php
 
 /*
-Plugin Name: List Pages Shortcode
-Plugin URI: http://wordpress.org/extend/plugins/list-pages-shortcode/
+Plugin Name: List Pages Shortcode for Bri-Ri
+Plugin URI: http://github.com/greatislander/list-pages-shortcode/
 Description: Introduces the [list-pages], [sibling-pages] and [child-pages] <a href="http://codex.wordpress.org/Shortcode_API">shortcodes</a> for easily displaying a list of pages within a post or page.  Both shortcodes accept all parameters that you can pass to the <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages">wp_list_pages()</a> function.  For example, to show a page's child pages sorted by title simply add [child-pages sort_column="post_title"] in the page's content.
-Author: Ben Huson, Aaron Harp
+Author: Ben Huson, Aaron Harp, Ned Zimmerman
 Version: 1.7.4
 Author URI: http://www.aaronharp.com
+Github Plugin URL: greatislander/list-pages-shortcode
 */
 
 add_shortcode( 'child-pages', array( 'List_Pages_Shortcode', 'shortcode_list_pages' ) );
@@ -242,7 +243,9 @@ class List_Pages_Shortcode_Walker_Page extends Walker_Page {
 			$page->post_title = sprintf( __( '#%d (no title)' ), $page->ID );
 		}
 
-		$item = '<a href="' . get_permalink( $page->ID ) . '">' . $link_before . apply_filters( 'the_title', $page->post_title, $page->ID ) . $link_after . '</a>';
+		$thumbnail = ( has_post_thumbnail( $page ) ) ? get_the_post_thumbnail( $page, 'thumbnail' ) : '<img width="150" height="150" src="' . plugins_url( 'assets/fallback.jpg', __FILE__ ) . '" alt="The initials B and R" />';
+
+		$item = '<a href="' . get_permalink( $page->ID ) . '">' . $thumbnail . '<br >' . $link_before . apply_filters( 'the_title', $page->post_title, $page->ID ) . $link_after . '</a>';
 
 		if ( ! empty( $show_date ) ) {
 			if ( 'modified' == $show_date ) {
